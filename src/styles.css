@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Newsreader", "Iowan Old Style", "Palatino Linotype", serif;
+  --font-mono: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #f3efe6;
+  --color-sunken: #e7e0d2;
+  --color-surface: #faf7f1;
+  --color-paper: #fffdf8;
+  --color-ink: #1b2430;
+  --color-ink-soft: #3c4858;
+  --color-muted: #6b6458;
+  --color-faint: #948c80;
+  --color-line: #d8d0c2;
+  --color-line-strong: #c4b8a5;
+  --color-teal: #1a5f58;
+  --color-teal-hover: #154e48;
+  --color-teal-fg: #f3efe6;
+  --color-teal-soft: #dceee9;
+  --color-danger: #8f2d2d;
+  --color-ok: #2c6a4f;
+  --color-warn: #8a5a22;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+
+  --shadow-card:
+    0 0 0 1px rgba(27, 36, 48, 0.06),
+    0 1px 2px rgba(27, 36, 48, 0.04),
+    0 8px 24px rgba(27, 36, 48, 0.04);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+  }
+  p { text-wrap: pretty; }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  :root { background: white; }
+  @page { size: A4; margin: 14mm; }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print { display: none !important; }
+  .print-root {
+    background: white !important;
+    padding: 0 !important;
+  }
+  a { text-decoration: none; color: inherit; }
+  img { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
