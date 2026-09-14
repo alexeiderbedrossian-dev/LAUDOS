@@ -1,7 +1,10 @@
 import type { ReactNode } from "react";
-import { Outlet, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Outlet, getRouteApi, useRouterState } from "@tanstack/react-router";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+
+const rootRouteApi = getRouteApi("__root__");
 
 export function SessionGate() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -10,10 +13,19 @@ export function SessionGate() {
 }
 
 function RequireSession() {
+  const { sessionUser } = rootRouteApi.useRouteContext();
   const { user, isPending } = useCurrentUserState();
-  if (isPending) return <SessionSkeleton />;
-  if (!user) return <RedirectToSignIn />;
-  return <Outlet />;
+  const [stale, setStale] = useState(false);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => setStale(true), 1600);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  if (user) return <Outlet />;
+  if (sessionUser && (stale || !isPending)) return <Outlet />;
+  if (isPending && !stale) return <SessionSkeleton />;
+  return <RedirectToSignIn />;
 }
 
 function SessionSkeleton({ children }: { children?: ReactNode }) {
@@ -28,6 +40,7 @@ function SessionSkeleton({ children }: { children?: ReactNode }) {
       <div className="mx-auto max-w-6xl px-4 py-10">
         {children ?? (
           <div className="space-y-4">
+            <p className="text-sm text-muted">Carregando o acesso…</p>
             <div className="h-10 w-2/3 max-w-md animate-pulse rounded-md bg-sunken" />
             <div className="h-4 w-1/2 max-w-sm animate-pulse rounded-md bg-sunken" />
             <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

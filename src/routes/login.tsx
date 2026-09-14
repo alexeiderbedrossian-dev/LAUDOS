@@ -5,13 +5,11 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { ClinicLogo } from "@/components/clinic-logo";
-import { SessionSkeleton } from "@/components/session-gate";
 
 export const Route = createFileRoute("/login")({ component: Login });
 
 function Login() {
-  const { user, isPending } = useCurrentUserState();
-  if (isPending) return <SessionSkeleton />;
+  const { user } = useCurrentUserState();
   if (user) return <Navigate to="/" />;
   return <LoginForm />;
 }
